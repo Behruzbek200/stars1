@@ -1,0 +1,62 @@
+STARS + PREMIUM + HUMO STRING SESSION — RENDER FREE
+===============================================
+
+Birgina to'lov usuli: @HUMOcardbot bank xabarlarini Telethon orqali kuzatish.
+@AvtoTolovApp, TolovAPI, Shop ID, Shop Key KERAK EMAS.
+
+1. Fayllarni GitHub repoga joylang: bot.py, requirements.txt, render.yaml, .python-version.
+2. Render -> New -> Web Service -> repo -> Free.
+3. Build: pip install -r requirements.txt
+   Start: python bot.py --render-start
+   Health: /health
+4. Render -> Environment:
+   BOT_TOKEN=<BotFather yangi token>
+   OWNER_ID=6232278895
+   ENABLE_LIVE_SALES=1
+   TELEGRAM_API_ID=<my.telegram.org API ID>
+   TELEGRAM_API_HASH=<my.telegram.org API HASH>
+   TELETHON_STRING_SESSION=<yangi, sir saqlanadigan StringSession>
+   HUMO_BOT_USERNAME=HUMOcardbot
+   HUMO_AUTO_CREDIT=1
+
+   Tavsiya: HUMO_SENDER_ID=<HUMOcardbot haqiqiy raqamli Telegram ID>
+   Ixtiyoriy: HUMO_CARD_LAST4=<admin kiritgan kartaning oxirgi 4 raqami>
+
+5. Deploydan keyin /admin -> API va to'lov:
+   - HUMO karta raqami
+   - karta egasi
+   - Fragment API Key
+   - USD/UZS kursi
+   - Stars 1 dona narxi; Premium 3/6/12 oy narxlari
+6. /bankstatus: Ulangan va Avto kredit True chiqishini ko'ring.
+7. @HUMOcardbot xabari: aniq kirim summasi + karta oxirgi 4 raqam +
+   bank xabarining yagona Telegram IDsi bilan, bitta pending to'lov balansga 1 marta yoziladi.
+8. Stars va Premium xarid uchun Fragment API hamyoni yetarli bo'lishi kerak.
+
+DIQQAT:
+- Tashqi DATABASE_URL talab qilinmaydi. Mahalliy vaqtinchalik SQLite ishlatiladi.
+  Render Free redeploy/restartdan keyin BALANS, buyurtmalar va admin sozlamalari
+  yo'qolishi mumkin. Haqiqiy mijoz pullari uchun xavfli.
+- StringSession shaxsiy Telegram akkauntiga kirish huquqini beradi: GitHubga yuklamang.
+  Oldin chatga joylangan sessiyani Telegram sozlamasidan bekor qilib yangisini oling.
+- Bank-bot xabari imzolangan bank API tasdig'i emas. Xabar turi parserga mos
+  kelmasa avto tasdiqlanmaydi, adminga tekshirish kerak.
+- Render Free uxlab qoladi. 24/7 nazorat kafolatlanmaydi.
+- Telegram rasmiy qoidalari: bot ichidagi raqamli tovarlar uchun XTR talab etiladi.
+- Real to'lov / Fragment yetkazish jonli sinovdan o'tkazilmagan.
+
+KIRIM XABARI TUZATISHI (2026-11-07)
+--------------------------------
+HUMO Card xabari: “To'ldirish”, “➕ 1.001,00 UZS”, “HUMOCARD *1802”.
+Bot endi kirim miqdorini karta qoldig'idan ajratadi va tranzaksiya ID bo'lmasa
+@HUMOcardbot xabarining sender_id + message_id juftligini takrorlanmas kalit qiladi.
+Soxta yoki noaniq xabarlarni o'tkazmang: yuboruvchini, kartani, aniq summani
+va 5 daqiqalik faol pending invoice mavjudligini ham tekshiradi.
+
+DIQQAT: Bu tuzatish oldingi pulingizni avtomatik qaytarmaydi. Render Free
+redeploy qilganda vaqtinchalik SQLite bazasi yo'qoladi. Ilgari pul jo'natilgan
+bo'lsa, admin botdagi user profilida balansni qo'lda to'ldirsin (bankdagi
+kirimni va oldin balansga tushmaganini tekshirib). Takror o'tkazma QILMANG.
+
+StringSession avval chatga ochiq yuborilgan: eskisini Telegram Devices da
+bekor qiling va yangi sessiyani faqat Render Environment da saqlang.
