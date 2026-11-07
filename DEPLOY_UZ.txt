@@ -1,0 +1,107 @@
+STARS & PREMIUM SHOP — RENDER, TELEBOT, BIRTA bot.py
+==================================================
+
+DIQQAT: TO'LOV PROVIDERI HAMYONAPI.UZ (TolovAPI.uz EMAS).
+TolovAPI.uz rasmiy joriy API shartlari tasdiqlanmagani sababli
+unda tasdiqlanmagan endpoint ishlatilmayapti.
+
+DASTURDA BOR
+- 6 ta foydalanuvchi menyusi: Stars, Premium, Hisob to'ldirish, Hisobim,
+  Buyurtmalarim, Yordam.
+- Stars: to'plamlar va boshqa miqdor, 1 Stars narxidan avtomatik hisob.
+- Premium: 3/6/12 oy; o'zimga/boshqaga username yoki t.me link orqali.
+- Admin panel: narxlar, API kalitlar, statistikalar, yordam, foydalanuvchilar,
+  majburiy obuna, xabar yuborish, to'lovlar, buyurtma holatlari.
+- HamyonAPI: imzolangan paid callback avtomatik balansga qo'shiladi.
+- Fragment-API: Stars/Premium buy endpointlariga avtomatik yuborish.
+- Takroriy callback, takroriy tasdiqlash, zararli narxlar va noaniq buyurtmalar
+  uchun himoya.
+
+1. GITHUB
+  Bot tokenini (eski token avval oshkor bo'lgan!), Shop Key va Fragment
+  API Key ni kodga YOZMANG. GitHubga faqat bot.py, requirements.txt,
+  render.yaml, .gitignore, DEPLOY_UZ.txt yuklang.
+  Oldingi mansur_stars_bot repo ichidagi app.py demo botdir. Render yangi
+  bot.py ni Start Command orqali ishga tushiradi. Vercelga mos vercel.json
+  Renderda ishlatilmaydi.
+
+2. RENDER
+  New -> Blueprint (render.yaml) yoki New -> Web Service:
+  Build: pip install -r requirements.txt
+  Start: python bot.py --render-start
+  Paid Starter + Disk (/var/data, kamida 1 GB)
+  Python Runtime. Health Check Path: /health
+
+  ENVIRONMENT:
+    BOT_TOKEN=BotFather dan olgan YANGI tokeningiz
+    OWNER_ID=6232278895  (sizni IDingiz shunday bo'lsagina)
+    ENABLE_LIVE_SALES=0   (avval sinov)
+    DATA_DIR=/var/data
+    DB_FILE=/var/data/stars_shop.sqlite3
+    SECRET_FILE=/var/data/stars_shop.secret
+
+  PUBLIC_URL kerak emas: Render RENDER_EXTERNAL_HOSTNAME ni beradi.
+  Agar RENDER_EXTERNAL_HOSTNAME bo'lmasa, PUBLIC_URL=https://nom.onrender.com
+
+  Eslatma: Render Free'da SQLite bazasi yo'qoladi; Free Postgres 30 kunda
+  tugaydi. Haqiqiy pul uchun pullik disk yoki barqaror DB kerak.
+  Agar eski botdagi mijoz balanslari bor bo'lsa, avval DBni va shifrlash
+  kalitini zaxiralang. Yangi DB eski balansni o'z-o'zidan ko'chirmaydi.
+
+3. HAMYONAPI.UZ
+  https://hamyon-api.uz/ orqali shop_id va shop_key oling.
+  HUMO/UZCARD kuzatuv kartasini provayder ko'rsatmalariga muvofiq ulang.
+  Telegram bot -> /admin -> 🔌 API va to'lov -> Shop ID / Shop Key.
+  complete_url va prepare_url ni admin paneldan nusxalab HamyonAPI
+  do'koningizning callback sozlamasiga kiriting.
+  HamyonAPI karta va to'lov IDni o'zi beradi; kartani bot kodi
+  almashtirmaydi. Provayderning rasmiy muddati 5 daqiqa.
+
+  Callback rasmiy sign: md5(shop_id + payment_id + amount + shop_key).
+  To'lov imzosi, provider ID va aniq summa mos kelmasa BALANSGA
+  PUL QO'SHILMAYDI. GET status axborot, imzolangan callback asosiy manba.
+  Agar provayder callback formati o'zgarsa, qayta moslashtirish zarur.
+
+4. FRAGMENT-API.UZ
+  https://fragment-api.uz/ dan loyiha oching, API Key va kerakli
+  TON/USDT hamyonini ulang, hamyonni mablag' bilan to'ldiring.
+  Bot -> /admin -> 🔌 API va to'lov -> Fragment API Key, USD/UZS.
+  Bot -> /admin -> Stars narxlari: 1 ⭐ narxini kiriting.
+  Bot -> /admin -> Premium narxlari: 3, 6, 12 oy narxlarini kiriting.
+  IP allowlist ishlatilsa, Render outgoing IP chiqishini ruxsat qiling.
+
+5. AVTO TO'LOVNI YOQISH
+  1) Avval /admin konfiguratsiyani to'ldiring.
+  2) HamyonAPI callback, Fragment /wallet/balance va /getInfo sinovlari
+     o'tganini tekshiring.
+  3) Render Environment: ENABLE_LIVE_SALES=1; Save & Deploy.
+  4) Bot -> /admin -> 🔌 API va to'lov -> Avto to'lovni boshqarish
+     -> MAS'ULMAN — YOQISH.
+  5) O'Z KARTANGIZDAN kichik haqiqiy balans to'ldiring.
+  6) Balance real ko'paydimi, bir to'lov qayta callback qilinsa yana
+     ko'paymayaptimi tekshiring.
+  7) 50 Starsni o'zingizga yuborib ko'ring. Fragment dashboardda ham
+     haqiqiy delivery muvaffaqiyatli ekanini tasdiqlang.
+  8) Premiumni alohida real sinov qiling (3 oy juda qimmat bo'lishi mumkin).
+     Bular muvaffaqiyatli bo'lmasdan MİJOZGA TO'LIQ TAYYOR deb bermang.
+
+6. AMALIY XAVFSIZLIK
+  - Bot tokeni, API kalitlar, APP_SECRET va callback URLni hech kimga
+    yubormang. BotFather orqali oldin oshkor qilingan tokenni revoke qiling.
+  - Bitta token uchun bitta webhook. Eski PythonAnywhere/Vercel webhooki
+    avtomatik almashtiriladi; eski serverni to'xtating.
+  - Fragment HTTP timeout/502 noaniq bo'lsa BUYURTMA QAYTA YUBORILMAYDI:
+    Fragment Dashboardda tekshirib admin hal qiladi.
+  - Narxlar va kalitlar kod o'zgartirmay bot admin panelida boshqariladi.
+    Biroq provayder APIsi o'zgarsa kodga yangilanish zarur bo'lishi mumkin.
+  - Provider bilan ishlashni faqat mahalliy mock test bilan to'liq kafolatlab
+    bo'lmaydi. Render va haqiqiy API creds bilan test o'tkazish kerak.
+
+OFFLINE TEST:
+  python offline_tests.py
+  Haqiqiy pul o'tkazilmaydi; testlar soxta Telegram/Flask so'rovlarini ishlatadi.
+
+RASMİY HUJJATLAR
+  https://fragment-api.uz/docs/openapi.json
+  https://hamyon-api.uz/
+  https://render.com/docs/free
