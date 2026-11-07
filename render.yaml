@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: stars-premium-humo-only
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py --render-start
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: OWNER_ID
+        sync: false
+      - key: ENABLE_LIVE_SALES
+        value: "1"
+      - key: TELEGRAM_API_ID
+        sync: false
+      - key: TELEGRAM_API_HASH
+        sync: false
+      - key: TELETHON_STRING_SESSION
+        sync: false
+      - key: HUMO_BOT_USERNAME
+        value: HUMOcardbot
+      - key: HUMO_AUTO_CREDIT
+        value: "1"
